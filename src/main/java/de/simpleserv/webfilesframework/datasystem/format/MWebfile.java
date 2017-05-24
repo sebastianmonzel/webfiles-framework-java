@@ -17,4 +17,8 @@ public class MWebfile {
     public String[] getDataset() {
         return dataset;
     }
+
+    public String marshall() {
+        return null;
+    }
 }

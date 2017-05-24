@@ -6,6 +6,9 @@ import de.simpleserv.webfilesframework.datastore.webfilestream.MWebfileStream;
 import de.simpleserv.webfilesframework.datasystem.format.MWebfile;
 import de.simpleserv.webfilesframework.io.request.MPostHttpRequest;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class MRemoteDatastore extends MAbstractDatastore {
 
     private String m_sDatastoreUrl;
@@ -25,7 +28,7 @@ public class MRemoteDatastore extends MAbstractDatastore {
     {
         this.m_sDatastoreUrl = datastoreUrl;
     }
-9
+
     public boolean tryConnect()
     {
         // TODO
@@ -38,12 +41,7 @@ public class MRemoteDatastore extends MAbstractDatastore {
         return false;
     }
 
-    private boolean doRemoteCall()
-    {
-        doRemoteCall(null);
-    }
-
-    private String doRemoteCall(String data)
+    private String doRemoteCall(HashMap<String, String> data)
     {
         MPostHttpRequest request = new MPostHttpRequest(this.m_sDatastoreUrl, data);
         String response = request.makeRequest();
@@ -56,36 +54,37 @@ public class MRemoteDatastore extends MAbstractDatastore {
         return getWebfilesAsStream(null);
     }
 
-    public MWebfileStream getWebfilesAsStream(String data)
+    public MWebfileStream getWebfilesAsStream(HashMap<String,String> data)
     {
         String callResult = this.doRemoteCall(data);
         return new MWebfileStream(callResult);
     }
 
-    public MWebfile[] getWebfilesAsArray() {
+    public List<MWebfile> getWebfilesAsList() {
         return getWebfilesAsStream().getWebfiles();
     }
 
-    public MWebfile[] searchByTemplate(MWebfile template)
+    public List<MWebfile> searchByTemplate(MWebfile template)
     {
-        String[] data = {};
-        data[PAYLOAD_FIELD_NAME_METHOD] = METHOD_NAME_SEARCH_BY_TEMPLATE;
-        data[PAYLOAD_FIELD_NAME_TEMPLATE] = template->marshall();
+        HashMap<String,String> data = new HashMap<String, String>();
+        data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_SEARCH_BY_TEMPLATE);
+        data.put(PAYLOAD_FIELD_NAME_TEMPLATE,template.marshall());
 
-        return $this->getWebfilesAsStream($data)->getWebfiles();
+        return getWebfilesAsStream(data).getWebfiles();
     }
 
-    public MWebfile[] getLatestWebfiles()
+    public List<MWebfile> getLatestWebfiles()
     {
         return getLatestWebfiles(5);
     }
 
-    public MWebfile[] getLatestWebfiles(int count)
+    public List<MWebfile> getLatestWebfiles(int count)
     {
         // TODO
+        return null;
     }
 
-    public function getNextWebfileForTimestamp(time)
+    public List<MWebfile> getNextWebfileForTimestamp(int time)
     {
         // TODO: Implement getNextWebfileForTimestamp() method.
         return null;
@@ -94,21 +93,20 @@ public class MRemoteDatastore extends MAbstractDatastore {
 
     public void storeWebfile(MWebfile webfile)
     {
+        HashMap<String,String> data = new HashMap<String, String>();
+        data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_STORE_WEBFILE);
+        data.put(PAYLOAD_FIELD_NAME_TEMPLATE,webfile.marshall());
 
-        String[] data = {};
-        data[PAYLOAD_FIELD_NAME_METHOD] = METHOD_NAME_STORE_WEBFILE;
-        data[PAYLOAD_FIELD_NAME_WEBFILE] = webfile->marshall();
-
-        $this->doRemoteCall(data);
+        this.doRemoteCall(data);
     }
 
     public void deleteByTemplate(MWebfile template)
     {
-        String[] data = {};
-        data[PAYLOAD_FIELD_NAME_METHOD] = METHOD_NAME_DELETE_BY_TEMPLATE;
-        data[PAYLOAD_FIELD_NAME_TEMPLATE] = template.marshall();
+        HashMap<String,String> data = new HashMap<String, String>();
+        data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_DELETE_BY_TEMPLATE);
+        data.put(PAYLOAD_FIELD_NAME_TEMPLATE,template.marshall());
 
-        $this->doRemoteCall(data);
+        this.doRemoteCall(data);
     }
 
 

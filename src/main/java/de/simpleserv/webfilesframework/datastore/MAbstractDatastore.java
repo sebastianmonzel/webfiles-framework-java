@@ -4,6 +4,7 @@ import de.simpleserv.webfilesframework.datastore.webfilestream.MWebfileStream;
 import de.simpleserv.webfilesframework.datasystem.format.MWebfile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class MAbstractDatastore {
@@ -36,9 +37,9 @@ public abstract class MAbstractDatastore {
      *
      * @return array list of webfiles
      */
-    public abstract MWebfile[] getWebfilesAsArray();
+    public abstract List<MWebfile> getWebfilesAsList();
 
-    public MWebfile[] getLatestWebfiles() {
+    public List<MWebfile> getLatestWebfiles() {
         return getLatestWebfiles(5);
     }
 
@@ -49,7 +50,7 @@ public abstract class MAbstractDatastore {
      * @param count Count of webfiles to be selected.
      * @return array list of webfiles
      */
-    public abstract MWebfile[] getLatestWebfiles(int count);
+    public abstract List<MWebfile> getLatestWebfiles(int count);
 
     /**
      * Returns a set of webfiles in the actual datastore which matches
@@ -61,18 +62,18 @@ public abstract class MAbstractDatastore {
      * <li>On the second step you put the template to the datastore to start the search</li>
      * </ol>
      *
-     * @param MWebfile $template template to search for
+     * @param template template to search for
      * @return array list of webfiles
      */
-    public abstract MWebfile[] searchByTemplate(MWebfile $template);
+    public abstract List<MWebfile> searchByTemplate(MWebfile template);
 
     /**
-     * @param array    $webfiles
-     * @param MWebfile $template
+     * @param webfiles
+     * @param template
      * @return array
      */
-    protected MWebfile[] filterWebfilesArrayByTemplate(MWebfile[] webfiles, final MWebfile template) {
-        MWebfile[] filteredWebfiles = {};
+    protected HashMap<String,MWebfile> filterWebfilesArrayByTemplate(MWebfile[] webfiles, final MWebfile template) {
+        HashMap<String,MWebfile> filteredWebfiles = new HashMap<String, MWebfile>();
         /** @var MWebfile $webfile */
         for (MWebfile webfile : webfiles) {
             if (webfile.matchesTemplate(template)) {
@@ -85,10 +86,10 @@ public abstract class MAbstractDatastore {
     /**
      * Stores a single webfile in the datastore.
      *
-     * @param MWebfile $webfile
+     * @param webfile
      * @throws MDatastoreException
      */
-    public void storeWebfile(MWebfile $webfile) throws MDatastoreException {
+    public void storeWebfile(MWebfile webfile) throws MDatastoreException {
 
         if (this.isReadOnly()) {
             throw new MDatastoreException("cannot modify data on read-only datastore.");
@@ -100,14 +101,14 @@ public abstract class MAbstractDatastore {
     /**
      * Stores all webfiles from a given webfilestream in the actual datastore
      *
-     * @param MWebfileStream $webfileStream
+     * @param webfileStream
      * @throws MDatastoreException
      */
-    public void storeWebfilesFromStream(MWebfileStream $webfileStream) throws MDatastoreException {
+    public void storeWebfilesFromStream(MWebfileStream webfileStream) throws MDatastoreException {
         if (this.isReadOnly()) {
             throw new MDatastoreException("cannot modify data on read-only datastore.");
         }
-        List<MWebfile> webfiles = $webfileStream.getWebfiles();
+        List<MWebfile> webfiles = webfileStream.getWebfiles();
 
         for (MWebfile webfile : webfiles) {
             this.storeWebfile(webfile);
@@ -118,10 +119,10 @@ public abstract class MAbstractDatastore {
      * Deletes a set of webfiles in the actual datastore which can be
      * applied to the given template.
      *
-     * @param MWebfile $template
+     * @param template
      * @throws MDatastoreException
      */
-    public void deleteByTemplate(MWebfile $template) throws MDatastoreException {
+    public void deleteByTemplate(MWebfile template) throws MDatastoreException {
         if (this.isReadOnly()) {
             throw new MDatastoreException("cannot modify data on read-only datastore.");
         } else {
@@ -136,7 +137,7 @@ public abstract class MAbstractDatastore {
      * to a webfile an the list of webfiles will be used to compare
      * the id on each datastore in the folder.
      *
-     * @param String $datastoreId
+     * @param datastoreId
      * @return MWebfile returns the found datastore
      * @throws MDatastoreException will be thrown if no datastore with
      *                             the given id is available.
@@ -161,16 +162,16 @@ public abstract class MAbstractDatastore {
     }
 
 
-    protected MWebfile[] addWebfileSafetyToArray(MWebfile webfile, MWebfile[] objectsArray) {
+    protected HashMap<String,MWebfile> addWebfileSafetyToArray(MWebfile webfile, HashMap<String,MWebfile> objectsArray) {
         String arrayKey = Integer.toString(webfile.getTime());
         int arrayKeyCount = 1;
 
         // make sure files with the same key (normally timetamp) have an unique array key
-        while (objectsArray[arrayKeyCount] != null) {
+        while (objectsArray.get(arrayKeyCount) != null) {
             arrayKeyCount++;
             arrayKey = arrayKey + "," + arrayKeyCount;
         }
-        objectsArray[arrayKey] = webfile;
+        objectsArray.put(arrayKey,webfile);
         return objectsArray;
     }
 
