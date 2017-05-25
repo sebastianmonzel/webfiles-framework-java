@@ -6,6 +6,7 @@ import de.simpleserv.webfilesframework.datastore.webfilestream.MWebfileStream;
 import de.simpleserv.webfilesframework.datasystem.format.MWebfile;
 import de.simpleserv.webfilesframework.io.request.MPostHttpRequest;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,31 +42,27 @@ public class MRemoteDatastore extends MAbstractDatastore {
         return false;
     }
 
-    private String doRemoteCall(HashMap<String, String> data)
-    {
+    private String doRemoteCall(HashMap<String, String> data) throws IOException {
         MPostHttpRequest request = new MPostHttpRequest(this.m_sDatastoreUrl, data);
         String response = request.makeRequest();
 
         return response;
     }
 
-    public MWebfileStream getWebfilesAsStream()
-    {
+    public MWebfileStream getWebfilesAsStream() throws IOException {
         return getWebfilesAsStream(null);
     }
 
-    public MWebfileStream getWebfilesAsStream(HashMap<String,String> data)
-    {
+    public MWebfileStream getWebfilesAsStream(HashMap<String,String> data) throws IOException {
         String callResult = this.doRemoteCall(data);
         return new MWebfileStream(callResult);
     }
 
-    public List<MWebfile> getWebfilesAsList() {
+    public List<MWebfile> getWebfilesAsList() throws IOException {
         return getWebfilesAsStream().getWebfiles();
     }
 
-    public List<MWebfile> searchByTemplate(MWebfile template)
-    {
+    public List<MWebfile> searchByTemplate(MWebfile template) throws IOException {
         HashMap<String,String> data = new HashMap<String, String>();
         data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_SEARCH_BY_TEMPLATE);
         data.put(PAYLOAD_FIELD_NAME_TEMPLATE,template.marshall());
@@ -91,17 +88,23 @@ public class MRemoteDatastore extends MAbstractDatastore {
     }
 
 
-    public void storeWebfile(MWebfile webfile)
-    {
+    public void storeWebfile(MWebfile webfile) throws IOException {
         HashMap<String,String> data = new HashMap<String, String>();
         data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_STORE_WEBFILE);
-        data.put(PAYLOAD_FIELD_NAME_TEMPLATE,webfile.marshall());
+        data.put(PAYLOAD_FIELD_NAME_WEBFILE,webfile.marshall());
 
         this.doRemoteCall(data);
     }
 
-    public void deleteByTemplate(MWebfile template)
-    {
+    public void storeWebfile(String webfile) throws IOException {
+        HashMap<String,String> data = new HashMap<String, String>();
+        data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_STORE_WEBFILE);
+        data.put(PAYLOAD_FIELD_NAME_WEBFILE,webfile);
+
+        this.doRemoteCall(data);
+    }
+
+    public void deleteByTemplate(MWebfile template) throws IOException {
         HashMap<String,String> data = new HashMap<String, String>();
         data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_DELETE_BY_TEMPLATE);
         data.put(PAYLOAD_FIELD_NAME_TEMPLATE,template.marshall());
@@ -109,5 +112,18 @@ public class MRemoteDatastore extends MAbstractDatastore {
         this.doRemoteCall(data);
     }
 
+    public static void main(String[] args) throws IOException {
 
+        MRemoteDatastore datastore = new MRemoteDatastore("https://www.sebastianmonzel.de/datastore/");
+        datastore.storeWebfile("<object classname=\"simpleserv\\webfilesframework\\core\\datastore\\types\\database\\MSampleWebfile\">" +
+                "<firstname><![CDATA[Sebastian]]></firstname>" +
+                "<lastname><![CDATA[Monzel]]></lastname>" +
+                "<street><![CDATA[Blumenstrasse]]></street>" +
+                "<housenumber><![CDATA[4]]></housenumber>" +
+                "<postcode><![CDATA[67433]]></postcode>" +
+                "<city><![CDATA[Neustadt an der Weinstrasse]]></city>" +
+                "<id><![CDATA[2]]></id>" +
+                "<time><![CDATA[4711]]></time>" +
+                "</object>");
+    }
 }

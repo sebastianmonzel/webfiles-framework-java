@@ -10,6 +10,7 @@ public class MWebfileStream {
     private List<MWebfile> webfiles;
 
     public MWebfileStream(String callResult) {
+
     }
 
     public List<MWebfile> getWebfiles() {

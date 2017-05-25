@@ -3,6 +3,7 @@ package de.simpleserv.webfilesframework.datastore;
 import de.simpleserv.webfilesframework.datastore.webfilestream.MWebfileStream;
 import de.simpleserv.webfilesframework.datasystem.format.MWebfile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,14 +31,14 @@ public abstract class MAbstractDatastore {
      *
      * @return MWebfileStream
      */
-    public abstract MWebfileStream getWebfilesAsStream();
+    public abstract MWebfileStream getWebfilesAsStream() throws IOException;
 
     /**
      * Returns all webfiles from the actual datastore.
      *
      * @return array list of webfiles
      */
-    public abstract List<MWebfile> getWebfilesAsList();
+    public abstract List<MWebfile> getWebfilesAsList() throws IOException;
 
     public List<MWebfile> getLatestWebfiles() {
         return getLatestWebfiles(5);
@@ -65,7 +66,7 @@ public abstract class MAbstractDatastore {
      * @param template template to search for
      * @return array list of webfiles
      */
-    public abstract List<MWebfile> searchByTemplate(MWebfile template);
+    public abstract List<MWebfile> searchByTemplate(MWebfile template) throws IOException;
 
     /**
      * @param webfiles
@@ -89,7 +90,7 @@ public abstract class MAbstractDatastore {
      * @param webfile
      * @throws MDatastoreException
      */
-    public void storeWebfile(MWebfile webfile) throws MDatastoreException {
+    public void storeWebfile(MWebfile webfile) throws MDatastoreException, IOException {
 
         if (this.isReadOnly()) {
             throw new MDatastoreException("cannot modify data on read-only datastore.");
@@ -104,7 +105,7 @@ public abstract class MAbstractDatastore {
      * @param webfileStream
      * @throws MDatastoreException
      */
-    public void storeWebfilesFromStream(MWebfileStream webfileStream) throws MDatastoreException {
+    public void storeWebfilesFromStream(MWebfileStream webfileStream) throws MDatastoreException, IOException {
         if (this.isReadOnly()) {
             throw new MDatastoreException("cannot modify data on read-only datastore.");
         }
@@ -122,7 +123,7 @@ public abstract class MAbstractDatastore {
      * @param template
      * @throws MDatastoreException
      */
-    public void deleteByTemplate(MWebfile template) throws MDatastoreException {
+    public void deleteByTemplate(MWebfile template) throws MDatastoreException, IOException {
         if (this.isReadOnly()) {
             throw new MDatastoreException("cannot modify data on read-only datastore.");
         } else {

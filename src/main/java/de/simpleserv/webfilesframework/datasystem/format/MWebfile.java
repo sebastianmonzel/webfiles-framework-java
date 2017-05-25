@@ -21,4 +21,8 @@ public class MWebfile {
     public String marshall() {
         return null;
     }
+
+    public MWebfile unmarshall() {
+        return null;
+    }
 }
