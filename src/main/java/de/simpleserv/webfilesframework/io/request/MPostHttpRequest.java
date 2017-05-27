@@ -25,9 +25,11 @@ public class MPostHttpRequest extends MAbstractHttpRequest {
 
         String result = "";
 
-        for (String key : data.keySet()) {
-            String value = data.get(key);
-            result += key + "=" + value + "&";
+        if (data != null) {
+            for (String key : data.keySet()) {
+                String value = data.get(key);
+                result += key + "=" + value + "&";
+            }
         }
 
         return result;
@@ -84,7 +86,7 @@ public class MPostHttpRequest extends MAbstractHttpRequest {
     public static void main(String[] args) throws IOException {
 
         HashMap<String, String> data = new HashMap<String, String>();
-        data.put("test","test");
+        data.put("test", "test");
         MPostHttpRequest request = new MPostHttpRequest("https://sebastianmonzel.de/datastore/", data);
         request.makeRequest();
     }

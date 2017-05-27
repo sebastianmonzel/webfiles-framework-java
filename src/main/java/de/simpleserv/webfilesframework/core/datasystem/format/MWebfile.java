@@ -1,17 +1,16 @@
-package de.simpleserv.webfilesframework.datasystem.format;
+package de.simpleserv.webfilesframework.core.datasystem.format;
 
+import de.simpleserv.webfilesframework.XmlHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.StringReader;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -96,10 +95,10 @@ public class MWebfile {
 
     }
 
-    private static MWebfile genericUnmarshall(String xmlAsString, final MWebfile targetObject) throws MWebfilesFrameworkException {
+    private static MWebfile genericUnmarshall(String xmlAsString, MWebfile targetObject) throws MWebfilesFrameworkException {
 
         try {
-            Document document = readDocumentFromString(xmlAsString);
+            Document document = XmlHelper.readDocumentFromString(xmlAsString);
 
             Node root = document.getFirstChild();
             String nodeName = root.getNodeName();
@@ -114,13 +113,21 @@ public class MWebfile {
                 }*/
             }
 
-            /*if ( $targetObject == null ) {
-                $classname = (string)$root->attributes()->classname;
+            System.out.println();
+            if ( targetObject == null ) {
+
+                String classname = root.getAttributes().getNamedItem("classname").getNodeValue();
+                classname = "de." + classname;
+                classname = classname.replace("\\",".");
+
+                Class<?> clazz = Class.forName(classname);
+                Constructor<?> ctor = clazz.getConstructor();
+                //Object object = ctor.newInstance(new Object[] { ctorArgument });
 
                 // INSTANCIATE NEW
-                $ref = new \ReflectionClass($classname);
-                $targetObject = $ref->newInstanceWithoutConstructor();
-            }*/
+                targetObject = (MWebfile) ctor.newInstance(new Object[] { });
+
+            }
 
             NodeList objectAttributes = root.getChildNodes();
             LinkedList<Field> attributes = targetObject.getAttributes();
@@ -153,14 +160,24 @@ public class MWebfile {
             }
             return targetObject;
 
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException e) {// TODO improve exception handling
             throw new MWebfilesFrameworkException("Error on reading initial xml: " + xmlAsString, e);
         } catch (SAXException e) {
             throw new MWebfilesFrameworkException("Error on reading initial xml: " + xmlAsString, e);
         } catch (IOException e) {
             throw new MWebfilesFrameworkException("Error on reading initial xml: " + xmlAsString, e);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-
+        return null;
     }
 
     private static void setAttributeValue(MWebfile targetObject, Field attribute, String nodeValue) throws IllegalAccessException {
@@ -175,14 +192,6 @@ public class MWebfile {
             attribute.set(targetObject,nodeValue);
         }
 
-    }
-
-    private static Document readDocumentFromString(String xmlAsString) throws ParserConfigurationException, SAXException, IOException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = null;
-        builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xmlAsString));
-        return builder.parse(is);
     }
 
     /**

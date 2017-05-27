@@ -1,6 +1,7 @@
-package de.simpleserv.webfilesframework.datasystem.format;
+package de.simpleserv.webfilesframework.core.datasystem.format;
 
 
+import de.simpleserv.webfilesframework.core.datastore.types.database.MSampleWebfile;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

@@ -1,7 +1,7 @@
-package de.simpleserv.webfilesframework.datastore;
+package de.simpleserv.webfilesframework.core.datastore;
 
-import de.simpleserv.webfilesframework.datastore.webfilestream.MWebfileStream;
-import de.simpleserv.webfilesframework.datasystem.format.MWebfile;
+import de.simpleserv.webfilesframework.core.datastore.webfilestream.MWebfileStream;
+import de.simpleserv.webfilesframework.core.datasystem.format.MWebfile;
 
 import java.io.IOException;
 import java.util.Date;

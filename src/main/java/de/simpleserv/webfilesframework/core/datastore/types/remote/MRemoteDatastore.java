@@ -1,9 +1,9 @@
-package de.simpleserv.webfilesframework.datastore.remote;
+package de.simpleserv.webfilesframework.core.datastore.types.remote;
 
 
-import de.simpleserv.webfilesframework.datastore.MAbstractDatastore;
-import de.simpleserv.webfilesframework.datastore.webfilestream.MWebfileStream;
-import de.simpleserv.webfilesframework.datasystem.format.MWebfile;
+import de.simpleserv.webfilesframework.core.datastore.MAbstractDatastore;
+import de.simpleserv.webfilesframework.core.datastore.webfilestream.MWebfileStream;
+import de.simpleserv.webfilesframework.core.datasystem.format.MWebfile;
 import de.simpleserv.webfilesframework.io.request.MPostHttpRequest;
 
 import java.io.IOException;
@@ -89,7 +89,7 @@ public class MRemoteDatastore extends MAbstractDatastore {
 
 
     public void storeWebfile(MWebfile webfile) throws IOException {
-        HashMap<String,String> data = new HashMap<String, String>();
+        HashMap<String,String> data = new HashMap<>();
         data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_STORE_WEBFILE);
         data.put(PAYLOAD_FIELD_NAME_WEBFILE,webfile.marshall());
 
@@ -97,7 +97,7 @@ public class MRemoteDatastore extends MAbstractDatastore {
     }
 
     public void storeWebfile(String webfile) throws IOException {
-        HashMap<String,String> data = new HashMap<String, String>();
+        HashMap<String,String> data = new HashMap<>();
         data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_STORE_WEBFILE);
         data.put(PAYLOAD_FIELD_NAME_WEBFILE,webfile);
 
@@ -105,7 +105,7 @@ public class MRemoteDatastore extends MAbstractDatastore {
     }
 
     public void deleteByTemplate(MWebfile template) throws IOException {
-        HashMap<String,String> data = new HashMap<String, String>();
+        HashMap<String,String> data = new HashMap<>();
         data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_DELETE_BY_TEMPLATE);
         data.put(PAYLOAD_FIELD_NAME_TEMPLATE,template.marshall());
 
