@@ -156,8 +156,8 @@ public abstract class MAbstractDatastore {
 
         /** @var MWebfile $webfile */
         for (MWebfile webfile : webfilesArray) {
-            String[] dataset = webfile.getDataset();
-            webfilesDatasets[webfilesDatasets.length] = dataset;
+            //String[] dataset = webfile.getDataset();
+            //webfilesDatasets[webfilesDatasets.length] = dataset;
         }
         return webfilesDatasets;
     }

@@ -112,18 +112,4 @@ public class MRemoteDatastore extends MAbstractDatastore {
         this.doRemoteCall(data);
     }
 
-    public static void main(String[] args) throws IOException {
-
-        MRemoteDatastore datastore = new MRemoteDatastore("https://www.sebastianmonzel.de/datastore/");
-        datastore.storeWebfile("<object classname=\"simpleserv\\webfilesframework\\core\\datastore\\types\\database\\MSampleWebfile\">" +
-                "<firstname><![CDATA[Sebastian]]></firstname>" +
-                "<lastname><![CDATA[Monzel]]></lastname>" +
-                "<street><![CDATA[Blumenstrasse]]></street>" +
-                "<housenumber><![CDATA[4]]></housenumber>" +
-                "<postcode><![CDATA[67433]]></postcode>" +
-                "<city><![CDATA[Neustadt an der Weinstrasse]]></city>" +
-                "<id><![CDATA[2]]></id>" +
-                "<time><![CDATA[4711]]></time>" +
-                "</object>");
-    }
 }

@@ -9,7 +9,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 
-public class MPostHttpRequest {
+public class MPostHttpRequest extends MAbstractHttpRequest {
 
     private final String USER_AGENT = "Mozilla/5.0";
 
@@ -18,10 +18,10 @@ public class MPostHttpRequest {
 
     public MPostHttpRequest(String m_sDatastoreUrl, HashMap<String, String> data) {
         this.m_sDatastoreUrl = m_sDatastoreUrl;
-        this.m_sUrlParameters = toParameters(data);
+        this.m_sUrlParameters = toParameterString(data);
     }
 
-    private String toParameters(HashMap<String, String> data) {
+    private String toParameterString(HashMap<String, String> data) {
 
         String result = "";
 
@@ -40,8 +40,6 @@ public class MPostHttpRequest {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
         addRequestHeader(con);
-
-        String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
         sendRequest(con, m_sUrlParameters);
 
         String response = getResponse(con);

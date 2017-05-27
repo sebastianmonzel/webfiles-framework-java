@@ -14,6 +14,6 @@ public class MWebfileStream {
     }
 
     public List<MWebfile> getWebfiles() {
-        return webfiles;    
+        return webfiles;
     }
 }
