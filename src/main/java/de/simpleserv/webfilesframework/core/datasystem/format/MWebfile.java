@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,18 +21,23 @@ public class MWebfile {
     protected String[] dataset;
     protected Integer m_iId;
 
+    protected HashSet<String> templatedAttributes = new HashSet<>();
+
     /**
      * @var int sets the time of the main context of the given webfile.
      * Example:<br />
      * An event would have the point when it takes place. An news entry
      * would have the creation time as context time.
      */
-    public int m_iTime;
+    public Integer m_iTime;
 
     /**
      * @var string
      */
     public static String $m__sClassName;
+
+    public MWebfile() {
+    }
 
     public String marshall() {
         return marshall(true);
@@ -49,7 +55,10 @@ public class MWebfile {
         if (usePreamble) {
             out += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         }
-        out += "<object classname=\"" + this.getClass().getCanonicalName() + "\">\n";// TODO normalize class name
+        String canonicalname = this.getClass().getCanonicalName();
+        String classname = canonicalname.substring(canonicalname.indexOf(".") + 1);
+        classname = classname.replaceAll("\\." , "\\\\");
+        out += "<object classname=\"" + classname + "\">\n";// TODO normalize class name
         for (Field attribute : attributes) {
 
             String attributeName = attribute.getName();
@@ -58,7 +67,12 @@ public class MWebfile {
                 attribute.setAccessible(true);
                 String attributeFieldName = getSimplifiedAttributeName(attributeName);
                 try {
-                    out += "\t<" + attributeFieldName + "><![CDATA[" + attribute.get(this) + "]]></" + attributeFieldName + ">\n";
+                    if ( !templatedAttributes.contains(attributeName) ) {
+                        String attributeValue = attribute.get(this) != null ? attribute.get(this).toString() : "";
+                        out += "\t<" + attributeFieldName + "><![CDATA[" + attributeValue + "]]></" + attributeFieldName + ">\n";
+                    } else {
+                        out += "\t<" + attributeFieldName + "><![CDATA[?]]></" + attributeFieldName + ">\n";
+                    }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -181,15 +195,18 @@ public class MWebfile {
     }
 
     private static void setAttributeValue(MWebfile targetObject, Field attribute, String nodeValue) throws IllegalAccessException {
-
-        if ( attribute.getType().equals(Boolean.class) ) {
-            attribute.set(targetObject, Boolean.parseBoolean(nodeValue));
-        } else if ( attribute.getType().equals(Integer.class) ) {
-            attribute.set(targetObject,Integer.parseInt(nodeValue));
-        } else if ( attribute.getType().equals(Double.class) ) {
-            attribute.set(targetObject,Double.parseDouble(nodeValue));
+        if ( nodeValue != null && !"null".equals(nodeValue) ) {
+            if (attribute.getType().equals(Boolean.class)) {
+                attribute.set(targetObject, Boolean.parseBoolean(nodeValue));
+            } else if (attribute.getType().equals(Integer.class)) {
+                attribute.set(targetObject, Integer.parseInt(nodeValue));
+            } else if (attribute.getType().equals(Double.class)) {
+                attribute.set(targetObject, Double.parseDouble(nodeValue));
+            } else {
+                attribute.set(targetObject, nodeValue);
+            }
         } else {
-            attribute.set(targetObject,nodeValue);
+            attribute.set(targetObject,null);
         }
 
     }
@@ -209,12 +226,7 @@ public class MWebfile {
             String attributeName = attribute.getName();
 
             if (isSimpleDatatype(attributeName)) {
-                attribute.setAccessible(true);
-                try {
-                    setAttributeValue(this, attribute, "?");
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                templatedAttributes.add(attributeName);
             }
         }
     }
@@ -258,7 +270,7 @@ public class MWebfile {
      * @return boolean
      */
     public static boolean isSimpleDatatype(String datatypeName) {
-        if (!isObject(datatypeName) && datatypeName.substring(2, 3).equals("_")) {
+        if (!isObject(datatypeName) && datatypeName.substring(1, 2).equals("_")) {
             return true;
         } else {
             return false;
@@ -292,10 +304,28 @@ public class MWebfile {
      * @return array array with attributes
      */
     public LinkedList<Field> getAttributes(boolean onlyAttributesOfSimpleDatatypes) {
-        Field[] fields = this.getClass().getDeclaredFields();
 
-        LinkedList<Field> fieldList = new LinkedList<Field>();
-        for (Field field : fields) {
+        LinkedList<Field> allDeclaredFields = new LinkedList<>();
+
+        Field[] declaredFields = this.getClass().getDeclaredFields();
+        for (Field field : declaredFields) {
+            allDeclaredFields.add(field);
+        }
+
+        Class<?> current = this.getClass();
+        while(current.getSuperclass()!=null){
+
+            current = current.getSuperclass();
+
+            Field[] innerDeclaredFields = current.getDeclaredFields();
+            for (Field field : innerDeclaredFields) {
+                allDeclaredFields.add(field);
+            }
+
+        }
+
+        LinkedList<Field> relevantFields = new LinkedList<>();
+        for (Field field : allDeclaredFields) {
 
             if (!field.isAccessible()) {
                 field.setAccessible(true);
@@ -307,12 +337,12 @@ public class MWebfile {
                     !attributeName.substring(2, 3).equals("_") &&
                     (onlyAttributesOfSimpleDatatypes && !attributeName.substring(2, 3).equals("o"))
                     ) {
-                fieldList.add(field);
+                relevantFields.add(field);
             }
 
         }
 
-        return fieldList;
+        return relevantFields;
     }
 
     /**
@@ -423,6 +453,7 @@ public class MWebfile {
     }
 
     public void setId(int itemId) {
+        templatedAttributes.remove("m_iId");
         this.m_iId = itemId;
     }
 
@@ -437,6 +468,7 @@ public class MWebfile {
      * @param $time unix timestamp of the context time.
      */
     public void setTime(int $time) {
+        templatedAttributes.remove("m_iTime");
         this.m_iTime = $time;
     }
 

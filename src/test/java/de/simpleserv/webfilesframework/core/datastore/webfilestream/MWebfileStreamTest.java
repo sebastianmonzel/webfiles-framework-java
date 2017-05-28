@@ -41,11 +41,11 @@ public class MWebfileStreamTest {
         assertThat(webfiles.get(1) instanceof MSampleWebfile,is(true));
 
         MSampleWebfile sampleWebfile1 = (MSampleWebfile) webfiles.get(0);
-        assertThat(sampleWebfile1.getFirstName(),is("Sebastian"));
+        assertThat(sampleWebfile1.getFirstname(),is("Sebastian"));
         assertThat(sampleWebfile1.getLastname(),is("Monzel"));
 
         MSampleWebfile sampleWebfile2 = (MSampleWebfile) webfiles.get(1);
-        assertThat(sampleWebfile2.getFirstName(),is("Sebastian2"));
+        assertThat(sampleWebfile2.getFirstname(),is("Sebastian2"));
         assertThat(sampleWebfile2.getLastname(),is("Monzel2"));
 
     }

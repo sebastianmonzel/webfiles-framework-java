@@ -25,16 +25,15 @@ public class MWebfileTest {
                 "\t<time><![CDATA[4711]]></time>\n" +
                 "</object>");
 
-        assertThat(sampleWebfile.getFirstName(),is("Sebastian"));
+        assertThat(sampleWebfile.getFirstname(),is("Sebastian"));
         assertThat(sampleWebfile.getLastname(),is("Monzel"));
         assertThat(sampleWebfile.getStreet(),is("Blumenstrasse"));
         assertThat(sampleWebfile.getHousenumber(),is("4"));
         assertThat(sampleWebfile.getPostcode(),is("67433"));
         assertThat(sampleWebfile.getCity(),is("Neustadt an der Weinstrasse"));
 
-        //assertThat(sampleWebfile.getTime(),is(4711));
-        //assertThat(sampleWebfile.getId(),is(2));
-
+        assertThat(sampleWebfile.getTime(),is(4711));
+        assertThat(sampleWebfile.getId(),is(2));
     }
 
 }
