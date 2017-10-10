@@ -47,7 +47,7 @@ public class MWebfileStreamTest {
         MSampleWebfile sampleWebfile2 = (MSampleWebfile) webfiles.get(1);
         assertThat(sampleWebfile2.getFirstname(),is("Sebastian2"));
         assertThat(sampleWebfile2.getLastname(),is("Monzel2"));
-
+        // ping
     }
 
 }
