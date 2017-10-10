@@ -1,7 +1,7 @@
 package de.sebastianmonzel.webfilesframework.core.datasystem.format;
 
 
-import de.sebastianmonzel.webfilesframework.core.datastore.types.database.MSampleWebfile;
+import de.simpleserv.webfilesframework.core.datastore.types.database.MSampleWebfile;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

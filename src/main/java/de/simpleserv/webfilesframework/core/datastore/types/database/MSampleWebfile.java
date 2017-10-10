@@ -1,4 +1,4 @@
-package de.sebastianmonzel.webfilesframework.core.datastore.types.database;
+package de.simpleserv.webfilesframework.core.datastore.types.database;
 
 import de.sebastianmonzel.webfilesframework.core.datasystem.format.MWebfile;
 

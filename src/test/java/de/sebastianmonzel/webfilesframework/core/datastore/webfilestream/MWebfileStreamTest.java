@@ -1,7 +1,7 @@
 package de.sebastianmonzel.webfilesframework.core.datastore.webfilestream;
 
 import de.sebastianmonzel.webfilesframework.core.datasystem.format.MWebfile;
-import de.sebastianmonzel.webfilesframework.core.datastore.types.database.MSampleWebfile;
+import de.simpleserv.webfilesframework.core.datastore.types.database.MSampleWebfile;
 import org.junit.Test;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class MWebfileStreamTest {
     @Test
     public void unmarshall() {
 
-        MWebfileStream mWebfileStream = new MWebfileStream("<?xml version=\"1.0\" encoding=\"UTF-8\"?><webfilestream><webfiles><object classname=\"sebastianmonzel\\webfilesframework\\core\\datastore\\types\\database\\MSampleWebfile\">\n" +
+        MWebfileStream mWebfileStream = new MWebfileStream("<?xml version=\"1.0\" encoding=\"UTF-8\"?><webfilestream><webfiles><object classname=\"simpleserv\\webfilesframework\\core\\datastore\\types\\database\\MSampleWebfile\">\n" +
                 "\t<firstname><![CDATA[Sebastian]]></firstname>\n" +
                 "\t<lastname><![CDATA[Monzel]]></lastname>\n" +
                 "\t<street><![CDATA[Blumenstrasse]]></street>\n" +
@@ -23,7 +23,7 @@ public class MWebfileStreamTest {
                 "\t<city><![CDATA[Neustadt an der Weinstrasse]]></city>\n" +
                 "\t<id><![CDATA[2]]></id>\n" +
                 "\t<time><![CDATA[4711]]></time>\n" +
-                "</object><object classname=\"sebastianmonzel\\webfilesframework\\core\\datastore\\types\\database\\MSampleWebfile\">\n" +
+                "</object><object classname=\"simpleserv\\webfilesframework\\core\\datastore\\types\\database\\MSampleWebfile\">\n" +
                 "\t<firstname><![CDATA[Sebastian2]]></firstname>\n" +
                 "\t<lastname><![CDATA[Monzel2]]></lastname>\n" +
                 "\t<street><![CDATA[Blumenstrasse]]></street>\n" +

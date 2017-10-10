@@ -1,7 +1,7 @@
 package de.sebastianmonzel.webfilesframework.core.datastore.types.remote;
 
 
-import de.sebastianmonzel.webfilesframework.core.datastore.types.database.MSampleWebfile;
+import de.simpleserv.webfilesframework.core.datastore.types.database.MSampleWebfile;
 import de.sebastianmonzel.webfilesframework.core.datastore.webfilestream.MWebfileStream;
 import de.sebastianmonzel.webfilesframework.core.datasystem.format.MWebfile;
 import org.junit.Test;
