@@ -1,14 +1,14 @@
-## webfilesframework-remotedatastore-java
+## webfiles-framework-java
 
 
-### First Steps
+### Remote datastore: First Steps
  - create a remote datastore via [https://github.com/sebastianmonzel/webfiles-framework-php/]
  - add maven dependency to your `pom.xml`
  - make sure all webfile definitions used in the the datastore are locally available
  - connect to your datastore
  - save and read data from your datastore
  
-### Basic Usecases
+### Remote datastore: Basic Usecases
  
 #### Read from RemoteDatastore
 ```java
