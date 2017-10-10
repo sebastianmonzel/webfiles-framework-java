@@ -49,8 +49,6 @@ public class MWebfileStream {
 
                 Node node = childNodes.item(actual);
                 actual++;
-                System.out.println(nodeToString(node));
-
                 if ( node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equals("object") ) {
                     webfilesResultArray.add(MWebfile.staticUnmarshall(nodeToString(node)));
                 }
