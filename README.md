@@ -2,6 +2,7 @@
 
 [![Build status][Travis Develop image]][Travis Develop link]
 [Travis Develop image]: https://img.shields.io/travis/sebastianmonzel/webfiles-framework-java/master.svg?style=flat-square
+[Travis Develop link]: https://travis-ci.org/sebastianmonzel/webfiles-framework-java
 
 
 ### Remote datastore: First Steps
