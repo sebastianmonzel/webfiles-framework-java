@@ -65,7 +65,7 @@ public class MRemoteDatastore extends MAbstractDatastore {
     public List<MWebfile> searchByTemplate(MWebfile template) throws IOException {
         HashMap<String,String> data = new HashMap<String, String>();
         data.put(PAYLOAD_FIELD_NAME_METHOD,METHOD_NAME_SEARCH_BY_TEMPLATE);
-        data.put(PAYLOAD_FIELD_NAME_TEMPLATE,template.marshall());
+        data.put(PAYLOAD_FIELD_NAME_TEMPLATE,template.marshall(false));
 
         return getWebfilesAsStream(data).getWebfiles();
     }

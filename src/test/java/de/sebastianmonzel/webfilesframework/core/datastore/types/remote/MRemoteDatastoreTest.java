@@ -1,7 +1,7 @@
 package de.sebastianmonzel.webfilesframework.core.datastore.types.remote;
 
 
-import de.simpleserv.webfilesframework.core.datastore.types.database.MSampleWebfile;
+import de.webfilesframework.core.datastore.types.database.MSampleWebfile;
 import de.sebastianmonzel.webfilesframework.core.datastore.webfilestream.MWebfileStream;
 import de.sebastianmonzel.webfilesframework.core.datasystem.format.MWebfile;
 import org.junit.Test;
@@ -17,12 +17,12 @@ public class MRemoteDatastoreTest {
     @Test
     public void getWebfiles() throws IOException {
 
-        MRemoteDatastore remoteDatastore = new MRemoteDatastore("http://www.sebastianmonzel.de/datastore/");
+        MRemoteDatastore remoteDatastore = new MRemoteDatastore("http://webfiles.sebastianmonzel.de/datastore/");
         MWebfileStream webfilesAsStream = remoteDatastore.getWebfilesAsStream();
 
         List<MWebfile> webfiles = webfilesAsStream.getWebfiles();
 
-        assertThat(webfiles.size(), is(3));
+        assertThat(webfiles.size(), is(2));
         assertThat(webfiles.get(0) instanceof MSampleWebfile, is(true));
         assertThat(webfiles.get(1) instanceof MSampleWebfile, is(true));
 
@@ -34,8 +34,7 @@ public class MRemoteDatastoreTest {
     @Test
     public void storeWebfile() throws IOException {
 
-        MRemoteDatastore remoteDatastore = new MRemoteDatastore("http://www.sebastianmonzel.de/datastore/");
-
+        MRemoteDatastore remoteDatastore = new MRemoteDatastore("http://webfiles.sebastianmonzel.de/datastore/");
 
         MSampleWebfile sampleWebfile = new MSampleWebfile();
         sampleWebfile.setId(5);
@@ -46,10 +45,10 @@ public class MRemoteDatastoreTest {
         MWebfileStream webfilesAsStream = remoteDatastore.getWebfilesAsStream();
         List<MWebfile> webfiles = webfilesAsStream.getWebfiles();
 
-        assertThat(webfiles.size(), is(4));
+        assertThat(webfiles.size(), is(3));
         assertThat(webfiles.get(2) instanceof MSampleWebfile, is(true));
 
-        MSampleWebfile sampleWebfile1 = (MSampleWebfile) webfiles.get(2);
+        MSampleWebfile sampleWebfile1 = (MSampleWebfile) webfiles.get(0);
         assertThat(sampleWebfile1.getId(), is(1));
 
         sampleWebfile.presetForTemplateSearch();
@@ -58,13 +57,13 @@ public class MRemoteDatastoreTest {
 
         webfilesAsStream = remoteDatastore.getWebfilesAsStream();
         webfiles = webfilesAsStream.getWebfiles();
-        assertThat(webfiles.size(), is(3));
+        assertThat(webfiles.size(), is(2));
     }
 
     @Test
     public void searchByTemplate() throws IOException {
 
-        MRemoteDatastore remoteDatastore = new MRemoteDatastore("http://www.sebastianmonzel.de/datastore/");
+        MRemoteDatastore remoteDatastore = new MRemoteDatastore("http://webfiles.sebastianmonzel.de/datastore/");
 
         MSampleWebfile template = new MSampleWebfile();
         template.presetForTemplateSearch();

@@ -1,7 +1,7 @@
 package de.sebastianmonzel.webfilesframework.core.datasystem.format;
 
 
-import de.simpleserv.webfilesframework.core.datastore.types.database.MSampleWebfile;
+import de.webfilesframework.core.datastore.types.database.MSampleWebfile;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -14,7 +14,7 @@ public class MWebfileTest {
 
         MSampleWebfile sampleWebfile = new MSampleWebfile();
 
-        sampleWebfile.unmarshall("<object classname=\"simpleserv\\webfilesframework\\core\\datastore\\types\\database\\MSampleWebfile\">\n" +
+        sampleWebfile.unmarshall("<object classname=\"webfilesframework\\core\\datastore\\types\\database\\MSampleWebfile\">\n" +
                 "\t<firstname><![CDATA[Sebastian]]></firstname>\n" +
                 "\t<lastname><![CDATA[Monzel]]></lastname>\n" +
                 "\t<street><![CDATA[Blumenstrasse]]></street>\n" +

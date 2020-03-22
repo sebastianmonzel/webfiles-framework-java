@@ -21,6 +21,9 @@ public class MWebfile {
     protected String[] dataset;
     protected Integer m_iId;
 
+    /**
+     * attributes in this list will be transformed while marshalling to "?"
+     */
     protected HashSet<String> templatedAttributes = new HashSet<>();
 
     /**
@@ -71,7 +74,7 @@ public class MWebfile {
                         String attributeValue = attribute.get(this) != null ? attribute.get(this).toString() : "";
                         out += "\t<" + attributeFieldName + "><![CDATA[" + attributeValue + "]]></" + attributeFieldName + ">\n";
                     } else {
-                        out += "\t<" + attributeFieldName + "><![CDATA[?]]></" + attributeFieldName + ">\n";
+                        out += "\t<" + attributeFieldName + "><![CDATA[[any]]]></" + attributeFieldName + ">\n";
                     }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -196,14 +199,17 @@ public class MWebfile {
 
     private static void setAttributeValue(MWebfile targetObject, Field attribute, String nodeValue) throws IllegalAccessException {
         if ( nodeValue != null && !"null".equals(nodeValue) ) {
+
+            String trimmedNodeValue = nodeValue.trim();
+
             if (attribute.getType().equals(Boolean.class)) {
-                attribute.set(targetObject, Boolean.parseBoolean(nodeValue));
+                attribute.set(targetObject, Boolean.parseBoolean(trimmedNodeValue));
             } else if (attribute.getType().equals(Integer.class)) {
-                attribute.set(targetObject, Integer.parseInt(nodeValue));
+                attribute.set(targetObject, Integer.parseInt(trimmedNodeValue));
             } else if (attribute.getType().equals(Double.class)) {
-                attribute.set(targetObject, Double.parseDouble(nodeValue));
+                attribute.set(targetObject, Double.parseDouble(trimmedNodeValue));
             } else {
-                attribute.set(targetObject, nodeValue);
+                attribute.set(targetObject, trimmedNodeValue);
             }
         } else {
             attribute.set(targetObject,null);

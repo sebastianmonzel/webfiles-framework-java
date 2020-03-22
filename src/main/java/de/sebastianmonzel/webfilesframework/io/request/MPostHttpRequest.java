@@ -13,12 +13,12 @@ public class MPostHttpRequest extends MAbstractHttpRequest {
 
     private final String USER_AGENT = "Mozilla/5.0";
 
-    private String m_sUrlParameters;
     private String m_sDatastoreUrl;
+    private String m_sPostBodyParamters;
 
     public MPostHttpRequest(String m_sDatastoreUrl, HashMap<String, String> data) {
         this.m_sDatastoreUrl = m_sDatastoreUrl;
-        this.m_sUrlParameters = toParameterString(data);
+        this.m_sPostBodyParamters = toParameterString(data);
     }
 
     private String toParameterString(HashMap<String, String> data) {
@@ -42,7 +42,7 @@ public class MPostHttpRequest extends MAbstractHttpRequest {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
         addRequestHeader(con);
-        sendRequest(con, m_sUrlParameters);
+        sendRequest(con);
 
         String response = getResponse(con);
         System.out.println(response);
@@ -56,14 +56,14 @@ public class MPostHttpRequest extends MAbstractHttpRequest {
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
     }
 
-    private void sendRequest(HttpURLConnection con, String urlParameters) throws IOException {
+    private void sendRequest(HttpURLConnection con) throws IOException {
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 
         System.out.println("\nSending 'POST' request to URL : " + m_sDatastoreUrl);
-        System.out.println("Post parameters : " + m_sUrlParameters);
+        System.out.println("Post parameters : " + m_sPostBodyParamters);
 
-        wr.writeBytes(urlParameters);
+        wr.writeBytes(m_sPostBodyParamters);
 
         wr.flush();
         wr.close();
