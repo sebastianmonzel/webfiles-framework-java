@@ -1,5 +1,8 @@
 ## webfiles-framework-java
 
+[![Build status][Travis Develop image]][Travis Develop link]
+[Travis Develop image]: https://img.shields.io/travis/sebastianmonzel/webfiles-framework-java/master.svg?style=flat-square
+
 
 ### Remote datastore: First Steps
  - create a remote datastore via [https://github.com/sebastianmonzel/webfiles-framework-php/]
